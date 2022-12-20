@@ -1,0 +1,38 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'hotfix/**'
+      - 'fix/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create environment file
+        run: |
+          cp example.env .env
+          echo AI_API_SERVER=${{ secrets.AI_API_SERVER }} >> .env
+          echo AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} >> .env
+          echo AWS_BUCKET=${{ secrets.AWS_BUCKET }} >> .env
+          echo AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} >> .env
+          echo GG_API_KEY=${{ secrets.GG_API_KEY }} >> .env
+          cat .env
+
+      - name: Test
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+      
+      - name: Install dependence
+        run: npm i
+
+      - name: Run test
+        run: npm test
