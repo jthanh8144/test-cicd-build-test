@@ -65,6 +65,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          timeout: 60s
+          command_timeout: 15m
           script: |
             cd cicd
             ./test-build.sh
